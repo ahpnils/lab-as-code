@@ -1,0 +1,4 @@
+#cloud-config
+vyos_config_commands:
+  - set system host-name 'isprouter1'
+  - set system login banner post-login 'Another Home Page Custom VYOS virtual router'
