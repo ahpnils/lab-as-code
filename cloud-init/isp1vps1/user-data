@@ -1,0 +1,15 @@
+#cloud-config
+
+
+users:
+  - name: nils
+    uid: "5001"
+    gid: "5001"
+    primary_group: nils
+    groups: users,wheel
+    lock_passwd: false
+    plain_text_passwd: password
+
+
+final_message: "Another Home Page ISP1 VPS1"
+
