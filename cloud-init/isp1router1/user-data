@@ -15,7 +15,7 @@ vyos_config_commands:
   # Configure NAT
   - set nat source rule 100 outbound-interface 'eth1'
   - set nat source rule 100 source address '10.0.0.0/8'
-  - set nat source rule 100 translation address masquerade
+  - set nat source rule 100 translation address 'masquerade'
   # DHCP server for local network (eth0)
   - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 range 0 start '10.1.1.9'
   - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 range 0 stop '10.1.1.254'
