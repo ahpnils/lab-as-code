@@ -10,12 +10,18 @@ resource "libvirt_volume" "isp1router1_vol" {
   base_volume_id = libvirt_volume.vyos_image.id
 }
 
-resource "libvirt_cloudinit_disk" "commoninit" {
-  #name = "${var.hostname}-commoninit.iso"
+resource "libvirt_cloudinit_disk" "isp1router1_cinit" {
   name = "isp1router1-commoninit.iso"
   pool = "nils_boot"
   meta_data = data.template_file.isp1router1_metadata.rendered
   user_data = data.template_file.isp1router1_userdata.rendered
+}
+
+resource "libvirt_cloudinit_disk" "isp1vps1_cinit" {
+  name = "isp1vps1-commoninit.iso"
+  pool = "nils_boot"
+  meta_data = data.template_file.isp1vps1_metadata.rendered
+  user_data = data.template_file.isp1vps1_userdata.rendered
 }
 
 data "template_file" "isp1router1_metadata" {
@@ -26,20 +32,28 @@ data "template_file" "isp1router1_userdata" {
   template = file("../cloud-init/isp1router1/user-data")
 }
 
+data "template_file" "isp1vps1_metadata" {
+  template = file("../cloud-init/isp1vps1/meta-data")
+}
+
+data "template_file" "isp1vps1_userdata" {
+  template = file("../cloud-init/isp1vps1/user-data")
+}
+
 resource "libvirt_domain" "isp1router1" {
   name = "isp1router1"
   memory = "512"
   vcpu = "1"
   #metadata = data.template_file.isp1router1_metadata.rendered
   #user_data = data.template_file.user_data.rendered
-  cloudinit = libvirt_cloudinit_disk.commoninit.id
-
-  network_interface {
-    network_name = "default"
-  }
+  cloudinit = libvirt_cloudinit_disk.isp1router1_cinit.id
 
   network_interface {
     network_name = "isp1net1"
+  }
+
+  network_interface {
+    network_name = "default"
   }
 
   console {
@@ -70,6 +84,7 @@ resource "libvirt_domain" "isp1vps1" {
   name = "isp1vps1"
   memory = "1024"
   vcpu = "2"
+  cloudinit = libvirt_cloudinit_disk.isp1vps1_cinit.id
   
   network_interface {
     network_name = "isp1net1"
