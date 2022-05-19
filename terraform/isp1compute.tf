@@ -44,6 +44,9 @@ resource "libvirt_domain" "isp1router1" {
   name = "isp1router1"
   memory = "512"
   vcpu = "1"
+  cpu {
+    mode = "host-passthrough"
+  }
   #metadata = data.template_file.isp1router1_metadata.rendered
   #user_data = data.template_file.user_data.rendered
   cloudinit = libvirt_cloudinit_disk.isp1router1_cinit.id
@@ -80,10 +83,19 @@ resource "libvirt_domain" "isp1router1" {
 
 }
 
+resource "time_sleep" "sleep_60s" {
+  depends_on = [libvirt_domain.isp1router1]
+  create_duration = "60s"
+}
+
 resource "libvirt_domain" "isp1vps1" {
+  depends_on = [time_sleep.sleep_60s]
   name = "isp1vps1"
   memory = "1024"
   vcpu = "2"
+  cpu {
+    mode = "host-passthrough"
+  }
   cloudinit = libvirt_cloudinit_disk.isp1vps1_cinit.id
   
   network_interface {
