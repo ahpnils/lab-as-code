@@ -33,7 +33,7 @@ vyos_config_commands:
   - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 range 0 stop '10.1.1.254'
   - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 default-router '10.1.1.1'
   - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 name-server '10.1.1.1'
-  - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 domain-name 'isp1.example.com'
+  - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 domain-name 'example.com'
   - set service dhcp-server shared-network-name LAN subnet 10.1.1.0/24 lease '86400'
   # We have a DNS forwarder on LAN
   - set service dns forwarding cache-size '0'
