@@ -2,12 +2,16 @@ variable "list_of_networks" {
   type = list(any)
   default = ["isp1net1",
   "isp1-isp2",
-  "isp1-isp6",
   "isp2net1",
+  "isp2-isp3",
   "isp3net1",
+  "isp3-isp4",
   "isp4net1",
+  "isp4-isp5",
   "isp5net1",
+  "isp5-isp6",
   "isp6net1",
+  "isp6-isp1",
   ]
 }
 

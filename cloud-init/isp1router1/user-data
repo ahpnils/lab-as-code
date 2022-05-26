@@ -7,10 +7,16 @@ vyos_config_commands:
   - set system ntp server '2.pool.ntp.org'
   - set system time-zone 'Etc/UTC'
   # Addressing for local interfaces
-  #- set interfaces ethernet eth1 address 'dhcp'
-  - set interfaces ethernet eth1 address '192.168.122.101/24'
+  #- set interfaces ethernet eth3 address 'dhcp'
+  - set interfaces ethernet eth3 address '192.168.122.101/24'
+  - delete interfaces ethernet eth3 address 'dhcp'
+  - set interfaces ethernet eth3 description 'OUTSIDE'
+  - set interfaces ethernet eth2 address '10.6.1.2/24'
+  - delete interfaces ethernet eth2 address 'dhcp'
+  - set interfaces ethernet eth2 description 'ISP6ISP1'
+  - set interfaces ethernet eth1 address '10.1.2.1/24'
   - delete interfaces ethernet eth1 address 'dhcp'
-  - set interfaces ethernet eth1 description 'OUTSIDE'
+  - set interfaces ethernet eth1 description 'ISP1ISP2'
   - set interfaces ethernet eth0 address '10.1.1.1/24'
   - delete interfaces ethernet eth0 address 'dhcp'
   - set interfaces ethernet eth0 description 'INSIDE'
@@ -19,7 +25,7 @@ vyos_config_commands:
   # DNS
   - set system name-server '192.168.122.1'
   # Configure NAT
-  - set nat source rule 100 outbound-interface 'eth1'
+  - set nat source rule 100 outbound-interface 'eth3'
   - set nat source rule 100 source address '10.0.0.0/8'
   - set nat source rule 100 translation address 'masquerade'
   # DHCP server for local network (eth0)

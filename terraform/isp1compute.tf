@@ -51,10 +51,22 @@ resource "libvirt_domain" "isp1router1" {
   #user_data = data.template_file.user_data.rendered
   cloudinit = libvirt_cloudinit_disk.isp1router1_cinit.id
 
+  # eth0
   network_interface {
     network_name = "isp1net1"
   }
 
+  # eth1
+  network_interface {
+    network_name = "isp1-isp2"
+  }
+
+  # eth2
+  network_interface {
+    network_name = "isp6-isp1"
+  }
+
+  # eth3
   network_interface {
     network_name = "default"
   }
