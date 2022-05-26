@@ -1,5 +1,6 @@
 #cloud-config
 
+fqdn: isp1vps1.example.com
 
 users:
   - name: nils
