@@ -1,7 +1,7 @@
 #cloud-config
 vyos_config_commands:
   # System configuration
-  - set system host-name 'isprouter1'
+  - set system host-name 'isp1router1'
   - set system login banner post-login 'Another Home Page Custom VYOS virtual router'
   #- set system ntp server '3.pool.ntp.org'
   - set system ntp server '2.pool.ntp.org'
