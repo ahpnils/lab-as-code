@@ -1,0 +1,41 @@
+#cloud-config
+vyos_config_commands:
+  # System configuration
+  - set system host-name 'isp2router1'
+  - set system login banner post-login 'Another Home Page Custom VYOS virtual router'
+  - set system ntp server '3.pool.ntp.org'
+  #- set system ntp server '2.pool.ntp.org'
+  - set system time-zone 'Etc/UTC'
+  # Addressing for local interfaces
+  #- set interfaces ethernet eth3 address 'dhcp'
+  - set interfaces ethernet eth3 address '192.168.122.102/24'
+  - delete interfaces ethernet eth3 address 'dhcp'
+  - set interfaces ethernet eth3 description 'OUTSIDE'
+  - set interfaces ethernet eth2 address '10.1.2.2/24'
+  - delete interfaces ethernet eth2 address 'dhcp'
+  - set interfaces ethernet eth2 description 'ISP1ISP2'
+  - set interfaces ethernet eth1 address '10.2.3.1/24'
+  - delete interfaces ethernet eth1 address 'dhcp'
+  - set interfaces ethernet eth1 description 'ISP2ISP3'
+  - set interfaces ethernet eth0 address '10.2.1.1/24'
+  - delete interfaces ethernet eth0 address 'dhcp'
+  - set interfaces ethernet eth0 description 'INSIDE'
+  # Default GW
+  - set protocols static route 0.0.0.0/0 next-hop '192.168.122.1'
+  # DNS
+  - set system name-server '192.168.122.1'
+  # Configure NAT
+  - set nat source rule 100 outbound-interface 'eth3'
+  - set nat source rule 100 source address '10.0.0.0/8'
+  - set nat source rule 100 translation address 'masquerade'
+  # DHCP server for local network (eth0)
+  - set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 range 0 start '10.2.1.9'
+  - set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 range 0 stop '10.2.1.254'
+  - set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 default-router '10.2.1.1'
+  - set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 name-server '10.2.1.1'
+  - set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 domain-name 'example.com'
+  - set service dhcp-server shared-network-name LAN subnet 10.2.1.0/24 lease '86400'
+  # We have a DNS forwarder on LAN
+  - set service dns forwarding cache-size '0'
+  - set service dns forwarding listen-address '10.2.1.1'
+  - set service dns forwarding allow-from '10.2.1.0/24'
