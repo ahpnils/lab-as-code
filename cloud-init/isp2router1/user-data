@@ -47,3 +47,8 @@ vyos_config_commands:
   - set protocols bgp neighbor 10.1.2.1 remote-as '65001'
   - set protocols bgp neighbor 10.1.2.1 update-source '10.1.2.2'
   - set protocols bgp address-family ipv4-unicast network '10.2.1.0/24'
+  - set protocols bgp neighbor 10.2.3.2 address-family 'ipv4-unicast'
+  - set protocols bgp neighbor 10.2.3.2 ebgp-multihop '2'
+  - set protocols bgp neighbor 10.2.3.2 remote-as '65003'
+  - set protocols bgp neighbor 10.2.3.2 update-source '10.2.3.1'
+  - set protocols bgp neighbor 10.2.3.2 address-family 'ipv4-unicast'
