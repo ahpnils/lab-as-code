@@ -42,11 +42,12 @@ vyos_config_commands:
   # BGP routing
   - set protocols bgp local-as '65002'
   - set protocols bgp parameters router-id '10.2.1.1'
+  - set protocols bgp address-family ipv4-unicast network '0.0.0.0/0'
+  - set protocols bgp address-family ipv4-unicast network '10.2.1.0/24'
   - set protocols bgp neighbor 10.1.2.1 address-family 'ipv4-unicast'
   - set protocols bgp neighbor 10.1.2.1 ebgp-multihop '2'
   - set protocols bgp neighbor 10.1.2.1 remote-as '65001'
   - set protocols bgp neighbor 10.1.2.1 update-source '10.1.2.2'
-  - set protocols bgp address-family ipv4-unicast network '10.2.1.0/24'
   - set protocols bgp neighbor 10.2.3.2 address-family 'ipv4-unicast'
   - set protocols bgp neighbor 10.2.3.2 ebgp-multihop '2'
   - set protocols bgp neighbor 10.2.3.2 remote-as '65003'
