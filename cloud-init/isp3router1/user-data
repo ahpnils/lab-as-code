@@ -1,0 +1,35 @@
+#cloud-config
+vyos_config_commands:
+  # System configuration
+  - set system host-name 'isp3router1'
+  - set system login banner post-login 'Another Home Page Custom VYOS virtual router'
+  - set system ntp server '3.pool.ntp.org'
+  #- set system ntp server '2.pool.ntp.org'
+  - set system time-zone 'Etc/UTC'
+  # Addressing for local interfaces
+  - set interfaces ethernet eth2 address '10.2.3.2/24'
+  - delete interfaces ethernet eth2 address 'dhcp'
+  - set interfaces ethernet eth2 description 'ISP2ISP3'
+  - set interfaces ethernet eth1 address '10.3.4.1/24'
+  - delete interfaces ethernet eth1 address 'dhcp'
+  - set interfaces ethernet eth1 description 'ISP3ISP4'
+  - set interfaces ethernet eth0 address '10.3.1.1/24'
+  - delete interfaces ethernet eth0 address 'dhcp'
+  - set interfaces ethernet eth0 description 'ISP3NET'
+  # DNS
+  - set system name-server '10.2.1.53'
+  # DHCP server for local network (eth0)
+  - set service dhcp-server shared-network-name LAN subnet 10.3.1.0/24 range 0 start '10.3.1.9'
+  - set service dhcp-server shared-network-name LAN subnet 10.3.1.0/24 range 0 stop '10.3.1.99'
+  - set service dhcp-server shared-network-name LAN subnet 10.3.1.0/24 default-router '10.3.1.1'
+  - set service dhcp-server shared-network-name LAN subnet 10.3.1.0/24 name-server '10.1.1.53'
+  - set service dhcp-server shared-network-name LAN subnet 10.3.1.0/24 domain-name 'example.com'
+  - set service dhcp-server shared-network-name LAN subnet 10.3.1.0/24 lease '86400'
+  # BGP routing
+  - set protocols bgp local-as '65003'
+  - set protocols bgp parameters router-id '10.3.1.1'
+  - set protocols bgp address-family ipv4-unicast network '10.3.1.0/24'
+  - set protocols bgp neighbor 10.2.3.1 ebgp-multihop '2'
+  - set protocols bgp neighbor 10.2.3.1 remote-as '65002'
+  - set protocols bgp neighbor 10.2.3.1 update-source '10.2.3.2'
+  - set protocols bgp neighbor 10.2.3.1 address-family 'ipv4-unicast'

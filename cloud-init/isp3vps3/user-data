@@ -1,0 +1,67 @@
+#cloud-config
+
+fqdn: isp3vps3.example.com
+
+users:
+  - name: nils
+    uid: "5001"
+    gid: "5001"
+    primary_group: nils
+    groups: users,wheel
+    lock_passwd: false
+    plain_text_passwd: password
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+write_files:
+ - content: 'vm.swappiness = 5'
+   owner: root:root
+   permissions: '0644'
+   path: /etc/sysctl.d/98-swappiness.conf
+ - content: |
+     tsflags='nodocs'
+     install_weak_deps=False
+   path: /etc/dnf/dnf.conf
+   append: true
+ - content: |
+     [DEFAULT]
+     bantime = 7200
+     sender = root
+     destemail = root
+     action = %(action_)s
+     mta = mail
+   path: /etc/fail2ban/jail.d/default.conf
+   owner: root:root
+   permissions: '0644'
+ - content: |
+     [sshd]
+     enabled = true
+   path: /etc/fail2ban/jail.d/sshd.conf
+   owner: root:root
+   permissions: '0644'
+ - content: |
+     [recidive]
+     enabled = true
+   path: /etc/fail2ban/jail.d/recidive.conf
+   owner: root:root
+   permissions: '0644'
+
+packages:
+    #- fail2ban-server
+    #- fail2ban-systemd
+    #- fail2ban-firewalld
+    #- fail2ban-selinux
+    - iftop
+    - lsof
+    - git-core
+    #- ansible-core
+
+runcmd:
+  - sysctl -p /etc/sysctl.d/98-swappiness.conf
+  - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.3.1.103/24' ipv4.gateway '10.3.1.1' ipv4.dns '10.1.1.53'
+  - nmcli con up path 1
+  #- dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-35.noarch.rpm
+  #- systemctl enable --now fail2ban.service
+  #- mkdir -p /srv/git/lab-as-code
+  #- git clone https://github.com/ahpnils/lab-as-code.git /srv/git/lab-as-code
+
+final_message: "Another Home Page ISP3 VPS3"
+
