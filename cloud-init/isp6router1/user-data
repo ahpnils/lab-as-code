@@ -1,0 +1,41 @@
+#cloud-config
+vyos_config_commands:
+  # System configuration
+  - set system host-name 'isp6router1'
+  - set system login banner post-login 'Another Home Page Custom VYOS virtual router'
+  - set system ntp server 3.pool.ntp.org
+  - set system ntp server 2.pool.ntp.org
+  - set system time-zone 'Etc/UTC'
+  # Addressing for local interfaces
+  - set interfaces ethernet eth2 address '10.5.6.2/24'
+  - delete interfaces ethernet eth2 address 'dhcp'
+  - set interfaces ethernet eth2 description 'ISP5ISP6'
+  - set interfaces ethernet eth1 address '10.6.1.1/24'
+  - delete interfaces ethernet eth1 address 'dhcp'
+  - set interfaces ethernet eth1 description 'ISP6ISP1'
+  - set interfaces ethernet eth0 address '10.6.0.1/24'
+  - delete interfaces ethernet eth0 address 'dhcp'
+  - set interfaces ethernet eth0 description 'ISP6NET'
+  # DNS
+  - set system name-server '10.1.1.53'
+  # DHCP server for local network (eth0)
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 range 0 start '10.6.0.9'
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 range 0 stop '10.6.0.99'
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 default-router '10.6.0.1'
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 name-server '10.1.1.53'
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 domain-name 'example.com'
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 lease '86400'
+  # BGP routing
+  - set protocols bgp local-as '65006'
+  - set protocols bgp parameters router-id '10.6.0.1'
+  - 'set protocols bgp address-family ipv4-unicast network 10.5.6.0/24'
+  - 'set protocols bgp address-family ipv4-unicast network 10.6.1.0/24'
+  - 'set protocols bgp address-family ipv4-unicast network 10.6.0.0/24'
+  - set protocols bgp neighbor 10.5.6.1 ebgp-multihop '2'
+  - set protocols bgp neighbor 10.5.6.1 remote-as '65005'
+  - set protocols bgp neighbor 10.5.6.1 update-source '10.5.6.2'
+  - set protocols bgp neighbor 10.5.6.1 address-family 'ipv4-unicast'
+  - set protocols bgp neighbor 10.6.1.2 ebgp-multihop '2'
+  - set protocols bgp neighbor 10.6.1.2 remote-as '65001'
+  - set protocols bgp neighbor 10.6.1.2 update-source '10.6.1.1'
+  - set protocols bgp neighbor 10.6.1.2 address-family 'ipv4-unicast'
