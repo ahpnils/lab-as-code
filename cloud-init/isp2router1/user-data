@@ -3,8 +3,8 @@ vyos_config_commands:
   # System configuration
   - set system host-name 'isp2router1'
   - set system login banner post-login 'Another Home Page Custom VYOS virtual router'
-  - set system ntp server '3.pool.ntp.org'
-  #- set system ntp server '2.pool.ntp.org'
+  - set system ntp server 3.pool.ntp.org
+  - set system ntp server 2.pool.ntp.org
   - set system time-zone 'Etc/UTC'
   # Addressing for local interfaces
   #- set interfaces ethernet eth3 address 'dhcp'
@@ -42,8 +42,10 @@ vyos_config_commands:
   # BGP routing
   - set protocols bgp local-as '65002'
   - set protocols bgp parameters router-id '10.2.1.1'
-  - set protocols bgp address-family ipv4-unicast network '0.0.0.0/0'
-  - set protocols bgp address-family ipv4-unicast network '10.2.1.0/24'
+  - set protocols bgp address-family ipv4-unicast network 0.0.0.0/0
+  - set protocols bgp address-family ipv4-unicast network 10.2.1.0/24
+  - set protocols bgp address-family ipv4-unicast network 10.1.2.0/24
+  - set protocols bgp address-family ipv4-unicast network 10.2.3.0/24
   - set protocols bgp neighbor 10.1.2.1 address-family 'ipv4-unicast'
   - set protocols bgp neighbor 10.1.2.1 ebgp-multihop '2'
   - set protocols bgp neighbor 10.1.2.1 remote-as '65001'
