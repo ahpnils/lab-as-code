@@ -17,12 +17,12 @@ vyos_config_commands:
   - delete interfaces ethernet eth0 address 'dhcp'
   - set interfaces ethernet eth0 description 'ISP6NET'
   # DNS
-  - set system name-server '10.1.1.53'
+  - set system name-server '10.1.0.53'
   # DHCP server for local network (eth0)
   - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 range 0 start '10.6.0.9'
   - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 range 0 stop '10.6.0.99'
   - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 default-router '10.6.0.1'
-  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 name-server '10.1.1.53'
+  - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 name-server '10.1.0.53'
   - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 domain-name 'example.com'
   - set service dhcp-server shared-network-name LAN subnet 10.6.0.0/24 lease '86400'
   # BGP routing

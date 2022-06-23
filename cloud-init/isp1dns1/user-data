@@ -44,16 +44,16 @@ write_files:
    owner: root:root
    permissions: '0644'
  - content: |
-     listen-address=10.1.1.53,127.0.0.1
+     listen-address=10.1.0.53,127.0.0.1
    path: /etc/dnsmasq.d/local.conf
    owner: root:root
    permissions: '0644'
  - content : |
-     10.1.1.101 vps1.example.com isp1vps1.example.com
-     10.1.1.53 ns1.example.com
-     10.2.1.53 ns2.example.com
-     10.1.1.1  isp1router1.example.com
-     10.2.1.1  isp2router1.example.com
+     10.1.0.101 vps1.example.com isp1vps1.example.com
+     10.1.0.53 ns1.example.com
+     10.2.0.53 ns2.example.com
+     10.1.0.1  isp1router1.example.com
+     10.2.0.1  isp2router1.example.com
    path: /etc/hosts
    owner: root:root
    permissions: '0644'
@@ -72,10 +72,10 @@ packages:
 
 runcmd:
   - sysctl -p /etc/sysctl.d/98-swappiness.conf
-  - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.1.1.53/24' ipv4.gateway '10.1.1.1' ipv4.dns '10.1.1.1'
+  - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.1.0.53/24' ipv4.gateway '10.1.0.1' ipv4.dns '10.1.0.1'
   - nmcli con up path 1
   #- dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-35.noarch.rpm
-  - systemctl enable --now fail2ban.service
+  #- systemctl enable --now fail2ban.service
   - systemctl enable --now dnsmasq.service
 
 final_message: "Another Home Page ISP1 DNS1"

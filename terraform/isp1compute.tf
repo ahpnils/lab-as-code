@@ -118,7 +118,7 @@ resource "libvirt_domain" "isp1router1" {
 
 resource "time_sleep" "isp1_sleep_60s" {
   depends_on = [libvirt_domain.isp1router1]
-  create_duration = "60s"
+  create_duration = "90s"
 }
 
 resource "time_sleep" "isp1_sleep_30s" {
