@@ -59,7 +59,7 @@ runcmd:
   - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.1.1.101/24' ipv4.gateway '10.1.1.1' ipv4.dns '10.1.1.53'
   - nmcli con up path 1
   #- dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-35.noarch.rpm
-  - systemctl enable --now fail2ban.service
+  #- systemctl enable --now fail2ban.service
   - mkdir -p /srv/git/lab-as-code
   - git clone https://github.com/ahpnils/lab-as-code.git /srv/git/lab-as-code
 
