@@ -10,8 +10,23 @@ users:
     groups: users,wheel
     lock_passwd: false
     plain_text_passwd: password
+    ssh_authorized_keys: 
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOVfricy4eeGvROKbr+n/+AvofYboQOKwEAsKJOh3jJK nils@homelab
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
 write_files:
+ - content: |
+     -----BEGIN OPENSSH PRIVATE KEY-----
+     b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+     QyNTUxOQAAACDlX64nMuHnhr0Tim6/p//gL6H2G6EDisBALCiTod4ySgAAAKgbIILRGyCC
+     0QAAAAtzc2gtZWQyNTUxOQAAACDlX64nMuHnhr0Tim6/p//gL6H2G6EDisBALCiTod4ySg
+     AAAEB5E0OG6Scu14RYFxyOJJVo+wm1TaBYG/o/9vloJYbpBuVfricy4eeGvROKbr+n/+Av
+     ofYboQOKwEAsKJOh3jJKAAAAIm5pbHNAYmxvb2Rob29mLmFub3RoZXJob21lcGFnZS5sb2
+     MBAgM=
+     -----END OPENSSH PRIVATE KEY-----
+   owner: nils:nils
+   permissions: '0600'
+   path: /home/nils/.ssh/id_ed25519
+   defer: true
  - content: 'vm.swappiness = 5'
    owner: root:root
    permissions: '0644'

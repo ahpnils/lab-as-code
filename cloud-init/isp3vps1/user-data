@@ -10,6 +10,8 @@ users:
     groups: users,wheel
     lock_passwd: false
     plain_text_passwd: password
+    ssh_authorized_keys: 
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOVfricy4eeGvROKbr+n/+AvofYboQOKwEAsKJOh3jJK nils@homelab
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
 write_files:
  - content: 'vm.swappiness = 5'
@@ -56,7 +58,7 @@ packages:
 
 runcmd:
   - sysctl -p /etc/sysctl.d/98-swappiness.conf
-  - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.3.0.101/24' ipv4.gateway '10.3.0.1' ipv4.dns '10.1.0.53'
+  - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.3.0.101/24' ipv4.gateway '10.3.0.1' ipv4.dns '10.2.0.53'
   - nmcli con up path 1
   #- dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-35.noarch.rpm
   #- systemctl enable --now fail2ban.service

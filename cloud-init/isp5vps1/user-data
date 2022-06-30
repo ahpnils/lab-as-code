@@ -10,6 +10,8 @@ users:
     groups: users,wheel
     lock_passwd: false
     plain_text_passwd: password
+    ssh_authorized_keys: 
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOVfricy4eeGvROKbr+n/+AvofYboQOKwEAsKJOh3jJK nils@homelab
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
 write_files:
  - content: 'vm.swappiness = 5'
