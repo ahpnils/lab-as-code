@@ -116,18 +116,18 @@ resource "libvirt_domain" "isp1router1" {
 
 }
 
-resource "time_sleep" "isp1_sleep_60s" {
+resource "time_sleep" "wait_for_isp1router1" {
   depends_on = [libvirt_domain.isp1router1]
   create_duration = "90s"
 }
 
-resource "time_sleep" "isp1_sleep_30s" {
+resource "time_sleep" "wait_for_isp1dns1" {
   depends_on = [libvirt_domain.isp1dns1]
-  create_duration = "30s"
+  create_duration = "45s"
 }
 
 resource "libvirt_domain" "isp1vps1" {
-  depends_on = [time_sleep.isp1_sleep_30s]
+  depends_on = [time_sleep.wait_for_isp1dns1]
   name = "isp1vps1"
   memory = "1024"
   vcpu = "2"
@@ -166,7 +166,7 @@ resource "libvirt_domain" "isp1vps1" {
 
 
 resource "libvirt_domain" "isp1dns1" {
-  depends_on = [time_sleep.isp1_sleep_60s]
+  depends_on = [time_sleep.wait_for_isp1router1]
   name = "isp1dns1"
   memory = "1024"
   vcpu = "2"

@@ -41,7 +41,7 @@ data "template_file" "isp4vps1_userdata" {
 }
 
 resource "libvirt_domain" "isp4router1" {
-  depends_on = [time_sleep.isp1_sleep_30s]
+  depends_on = [time_sleep.wait_for_isp3router1]
   name = "isp4router1"
   memory = "512"
   vcpu = "1"
@@ -91,13 +91,13 @@ resource "libvirt_domain" "isp4router1" {
 
 }
 
-resource "time_sleep" "isp4_sleep_60s" {
+resource "time_sleep" "wait_for_isp4router1" {
   depends_on = [libvirt_domain.isp4router1]
-  create_duration = "60s"
+  create_duration = "75s"
 }
 
 resource "libvirt_domain" "isp4vps1" {
-  depends_on = [time_sleep.isp4_sleep_60s]
+  depends_on = [time_sleep.wait_for_isp4router1]
   name = "isp4vps1"
   memory = "1024"
   vcpu = "2"

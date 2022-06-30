@@ -83,7 +83,7 @@ data "template_file" "isp3vps3_userdata" {
 }
 
 resource "libvirt_domain" "isp3router1" {
-  depends_on = [time_sleep.isp1_sleep_30s]
+  depends_on = [time_sleep.wait_for_isp2dns1]
   name = "isp3router1"
   memory = "512"
   vcpu = "1"
