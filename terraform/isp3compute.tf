@@ -133,13 +133,13 @@ resource "libvirt_domain" "isp3router1" {
 
 }
 
-resource "time_sleep" "isp3_sleep_60s" {
+resource "time_sleep" "wait_for_isp3router1" {
   depends_on = [libvirt_domain.isp3router1]
   create_duration = "60s"
 }
 
 resource "libvirt_domain" "isp3vps1" {
-  depends_on = [time_sleep.isp3_sleep_60s]
+  depends_on = [time_sleep.wait_for_isp3router1]
   name = "isp3vps1"
   memory = "1024"
   vcpu = "2"
@@ -177,7 +177,7 @@ resource "libvirt_domain" "isp3vps1" {
 }
 
 resource "libvirt_domain" "isp3vps2" {
-  depends_on = [time_sleep.isp3_sleep_60s]
+  depends_on = [time_sleep.wait_for_isp3router1]
   name = "isp3vps2"
   memory = "1024"
   vcpu = "2"
@@ -215,7 +215,7 @@ resource "libvirt_domain" "isp3vps2" {
 }
 
 resource "libvirt_domain" "isp3vps3" {
-  depends_on = [time_sleep.isp3_sleep_60s]
+  depends_on = [time_sleep.wait_for_isp3router1]
   name = "isp3vps3"
   memory = "1024"
   vcpu = "2"
