@@ -1,25 +1,25 @@
 resource "libvirt_volume" "isp2dns1_vol" {
   name = "isp2dns1.qcow2"
-  pool = "nils_images"
+  pool = var.images_pool
   base_volume_id = libvirt_volume.fedora_image.id
 }
 
 resource "libvirt_volume" "isp2router1_vol" {
   name = "isp2router1.qcow2"
-  pool = "nils_images"
+  pool = var.images_pool
   base_volume_id = libvirt_volume.vyos_image.id
 }
 
 resource "libvirt_cloudinit_disk" "isp2router1_cinit" {
   name = "isp2router1-commoninit.iso"
-  pool = "nils_boot"
+  pool = var.boot_pool
   meta_data = data.template_file.isp2router1_metadata.rendered
   user_data = data.template_file.isp2router1_userdata.rendered
 }
 
 resource "libvirt_cloudinit_disk" "isp2dns1_cinit" {
   name = "isp2dns1-commoninit.iso"
-  pool = "nils_boot"
+  pool = var.boot_pool
   meta_data = data.template_file.isp2dns1_metadata.rendered
   user_data = data.template_file.isp2dns1_userdata.rendered
 }
