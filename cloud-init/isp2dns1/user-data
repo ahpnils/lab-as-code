@@ -46,7 +46,7 @@ write_files:
    owner: root:root
    permissions: '0644'
  - content: |
-     listen-address=10.1.0.53,127.0.0.1
+     listen-address=10.2.0.53,127.0.0.1
    path: /etc/dnsmasq.d/local.conf
    owner: root:root
    permissions: '0644'
@@ -69,13 +69,16 @@ packages:
     - iftop
     - lsof
     - git-core
+    - dnsmasq
+    - bind-utils
 
 runcmd:
   - sysctl -p /etc/sysctl.d/98-swappiness.conf
   - nmcli con mod path 1 ipv4.method static ipv4.addresses '10.2.0.53/24' ipv4.gateway '10.2.0.1' ipv4.dns '10.2.0.1'
   - nmcli con up path 1
   #- dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-35.noarch.rpm
-  - systemctl enable --now fail2ban.service
+  #- systemctl enable --now fail2ban.service
+  - systemctl enable --now dnsmasq.service
 
-final_message: "Another Home Page ISP1 DNS1"
+final_message: "Another Home Page ISP2 DNS1"
 
