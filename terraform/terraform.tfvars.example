@@ -1,0 +1,7 @@
+# custom variables for Terraform
+
+images_pool = "default"
+boot_pool = "boot"
+fedora_image_source = "/home/nils/libvirt/boot/Fedora-Cloud-Base-36-1.5.x86_64.qcow2"
+vyos_image_source = "/home/nils/libvirt/boot/vyos-1.4-rolling-202203110317-cloud-init-10G-qemu.qcow2"
+libvirt_uri = "qemu+ssh://nils@192.168.6.13/system"
