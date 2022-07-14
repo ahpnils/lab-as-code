@@ -77,6 +77,10 @@ runcmd:
   #- systemctl enable --now fail2ban.service
   - mkdir -p /srv/git/lab-as-code
   - git clone https://github.com/ahpnils/lab-as-code.git /srv/git/lab-as-code
+  - chown -R nils:nils /srv/git/lab-as-code
+  - ln -s /srv/git/lab-as-code/ansible /home/nils/.ansible
+  - ln -s /srv/git/lab-as-code/ansible/ansible.cfg /home/nils/.ansible.cfg
+  - chown nils:nils /home/nils/.ansible /home/nils/.ansible.cfg
 
 final_message: "Another Home Page ISP1 VPS1"
 
