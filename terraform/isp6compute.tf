@@ -99,8 +99,8 @@ resource "time_sleep" "wait_for_isp6router1" {
 resource "libvirt_domain" "isp6vps1" {
   depends_on = [time_sleep.wait_for_isp6router1]
   name = "isp6vps1"
-  memory = "512"
-  vcpu = "1"
+  memory = "1024"
+  vcpu = "2"
   cpu {
     mode = "host-passthrough"
   }
