@@ -1,0 +1,12 @@
+---
+- name: web servers on ISP3
+  hosts: isp3
+  remote_user: nils
+
+  tasks:
+  - name: Ensure Nginx is at the latest version
+    ansible.builtin.yum:
+      name: nginx
+      state: latest
+  - name: Ensure Nginx is started
+    service: name=nginx state=started
