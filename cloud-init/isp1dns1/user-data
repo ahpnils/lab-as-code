@@ -51,11 +51,21 @@ write_files:
    owner: root:root
    permissions: '0644'
  - content : |
-     10.1.0.101 vps1.example.com isp1vps1.example.com
-     10.1.0.53 ns1.example.com
-     10.2.0.53 ns2.example.com
      10.1.0.1  isp1router1.example.com
+     10.1.0.101 isp1vps1.example.com
+     10.1.0.53 isp1dns1.example.com ns1.example.com
      10.2.0.1  isp2router1.example.com
+     10.2.0.53 isp2dns1.example.com ns2.example.com
+     10.3.0.1  isp3router1.example.com
+     10.3.0.101 isp3vps1.example.com
+     10.3.0.102 isp3vps2.example.com
+     10.3.0.103 isp3vps3.example.com
+     10.4.0.1  isp4router1.example.com
+     10.4.0.101 isp4vps1.example.com
+     10.5.0.1  isp5router1.example.com
+     10.5.0.101 isp5vps1.example.com
+     10.6.0.1  isp6router1.example.com
+     10.6.0.101 isp6vps1.example.com
    path: /etc/hosts
    owner: root:root
    permissions: '0644'
