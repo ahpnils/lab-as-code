@@ -68,6 +68,8 @@ packages:
     - lsof
     - git-core
     - ansible-core
+    - ansible-collection-ansible-posix
+    - ansible-collection-community-general
 
 runcmd:
   - sysctl -p /etc/sysctl.d/98-swappiness.conf
