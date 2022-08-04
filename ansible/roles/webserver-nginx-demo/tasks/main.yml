@@ -21,47 +21,37 @@
 
 - name: Handle Document Root part 3
   ansible.builtin.file:
-    path: "{{ docroot }}"
+    path: "{{ item }}"
     state: directory
     mode: 0755
     owner: root
     group: root
     follow: no
     force: yes
-
-- name: Handle log directory
-  ansible.builtin.file:
-    path: "{{ www_log_dir }}"
-    state: directory
-    mode: 0755
-    owner: root
-    group: root
-    follow: no
-    force: yes
-
-- name: Handle tmp directory
-  ansible.builtin.file:
-    path: "{{ www_tmp_dir }}"
-    state: directory
-    mode: 0755
-    owner: root
-    group: root
-    follow: no
-    force: yes
+  loop:
+    - "{{ docroot }}"
+    - "{{ www_log_dir }}"
+    - "{{ www_tmp_dir }}"
 
 - name: Allow Nginx to read files in www_base
   community.general.sefcontext:
-    target: '{{ www_base }}(/.*)?'
-    #setype: system_u:object_r:httpd_sys_content_t
+    target: "{{ item }}"
     setype: httpd_sys_content_t
     state: present
+  loop:
+    - '{{ www_base }}'
+    - '{{ docroot }}'
+    - '{{ www_tmp_dir }}'
 
 - name: Allow Nginx to write log files in www_log_dir
   community.general.sefcontext:
-    target: "{{ www_log_dir }}"
-    #setype: system_u:object_r:httpd_log_t
+    target: "{{ item }}"
     setype: httpd_log_t
     state: present
+  loop:
+    - "{{ www_log_dir }}"
+    - "{{ www_log_dir }}/access.log"
+    - "{{ www_log_dir }}/error.log"
 
 - name: Apply SELinux file context
   ansible.builtin.command: restorecon -irv "{{ www_base }}"
@@ -99,11 +89,11 @@
              log:
                access:
                  - path: "{{ www_log_dir }}/access.log"
+               error:
+                 - file: "{{ www_log_dir }}/error.log"
              locations:
                - location: /
                  core:
                    index: index.html
                    root: "{{ docroot }}"
-  notify: Restart nginx
-
 
