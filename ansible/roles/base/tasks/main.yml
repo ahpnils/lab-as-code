@@ -1,0 +1,3 @@
+- name: Install software dependencies
+  package: name="git,rsync,python3-libselinux,policycoreutils-python-utils" state=present
+

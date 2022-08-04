@@ -1,0 +1,7 @@
+---
+- name: Common base for every server
+  hosts: all
+
+  roles:
+  - { role: base }
+
