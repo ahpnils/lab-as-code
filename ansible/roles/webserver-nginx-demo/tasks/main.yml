@@ -76,13 +76,13 @@
 
 - name: install Nginx from OS repos
   import_role:
-    name: nginxinc.nginx
+    name: nginxinc.nginx_core.nginx
   vars:
     nginx_manage_repo: false
     nginx_install_from: os_repository
 - name: Create Custom Nginx configurations
   import_role:
-    name: nginxinc.nginx_config
+    name: nginxinc.nginx_core.nginx_config
   vars:
     nginx_config_debug_output: true # temporary
     nginx_config_http_template_enable: true
@@ -104,3 +104,6 @@
                  core:
                    index: index.html
                    root: "{{ docroot }}"
+  notify: Restart nginx
+
+
