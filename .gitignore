@@ -1,3 +1,5 @@
+# Terraform stuff
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -32,6 +34,17 @@ terraform/plan.out
 
 # Ignore Terraform lock file
 terraform/.terraform.lock.hcl
+
+# Ansible stuff
+
+# Ignore collections (pulled from Ansible Galaxy)
+ansible/collections
+
+# Ignore Galaxy cache
+ansible/galaxy_cache
+
+# Ignore Galaxy token
+ansible/galaxy_token
 
 # Ignore temporary vim files
 .*.swp
