@@ -1,0 +1,7 @@
+---
+- name: Installs some Nginx website
+  hosts: isp3vps1.example.com
+
+  roles:
+  - { role: webserver-nginx-demo }
+

@@ -1,0 +1,6 @@
+www_base: /srv/www/isp3vps1
+docroot: "{{ www_base }}/public"
+local_content_repo: "{{ www_base }}/repo"
+www_log_dir: "{{ www_base }}/log"
+www_tmp_dir: "{{ www_base }}/tmp"
+remote_content_repo: https://github.com/ahpnils/anotherhomepage.org.git
