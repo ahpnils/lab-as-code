@@ -50,6 +50,12 @@ write_files:
    path: /etc/dnsmasq.d/local.conf
    owner: root:root
    permissions: '0644'
+ - content: |
+     [Unit]
+     After=network-online.target
+   path: /etc/systemd/system/dnsmasq.service.d/local.conf
+   owner: root:root
+   permissions: '0644'
  - content : |
      10.1.0.1  isp1router1.example.com
      10.1.0.101 isp1vps1.example.com
