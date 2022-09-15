@@ -1,0 +1,111 @@
+- name: Install software dependencies
+  package: name="git,rsync" state=present
+
+- name: Clone HTML content repo
+  git:
+    repo: "{{ remote_content_repo }}"
+    dest: "{{ local_content_repo }}"
+    clone: yes
+    update: yes
+
+- name: Handle Document Root part 1
+  stat:
+    path: "{{ docroot }}"
+  register: document_root_type
+
+- name: Handle Document Root part 2
+  ansible.builtin.file:
+    path: "{{ docroot }}"
+    state: absent
+  when: document_root_type.stat.lnk is defined 
+
+- name: Handle Document Root part 3
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+    follow: no
+    force: yes
+  loop:
+    - "{{ docroot }}"
+    - "{{ www_log_dir }}"
+    - "{{ www_tmp_dir }}"
+
+- name: Allow Nginx to read files in www_base
+  community.general.sefcontext:
+    target: "{{ item }}"
+    setype: httpd_sys_content_t
+    state: present
+  loop:
+    - '{{ www_base }}'
+    - '{{ docroot }}'
+    - '{{ www_tmp_dir }}'
+
+- name: Allow Nginx to write log files in www_log_dir
+  community.general.sefcontext:
+    target: "{{ item }}"
+    setype: httpd_log_t
+    state: present
+  loop:
+    - "{{ www_log_dir }}"
+    - "{{ www_log_dir }}/access.log"
+    - "{{ www_log_dir }}/error.log"
+
+- name: Apply SELinux file context
+  ansible.builtin.command: restorecon -irv "{{ www_base }}"
+
+- name: Synchronize HTML content to Document Root
+  ansible.posix.synchronize:
+    src: "{{ local_content_repo }}/"
+    dest: "{{ docroot }}/"
+    delete: yes
+    recursive: yes
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: install Nginx from OS repos
+  import_role:
+    name: nginxinc.nginx_core.nginx
+  vars:
+    nginx_manage_repo: false
+    nginx_install_from: os_repository
+- name: Create Custom Nginx configurations
+  import_role:
+    name: nginxinc.nginx_core.nginx_config
+  vars:
+    nginx_config_debug_output: true # temporary
+    nginx_config_http_template_enable: true
+    nginx_config_http_template:
+      - template_file: http/default.conf.j2
+        deployment_location: /etc/nginx/conf.d/isp3vps2.example.com.conf
+        backup: true
+        config:
+         servers:
+           - core:
+               listen:
+                 - port: 80
+               server_name: isp3vps2.example.com
+             log:
+               access:
+                 - path: "{{ www_log_dir }}/access.log"
+               error:
+                 - file: "{{ www_log_dir }}/error.log"
+             locations:
+               - location: /
+                 core:
+                   index: index.php
+                   root: "{{ docroot }}"
+               - location: ~ \.php$
+                 core:
+                   root: "{{ docroot }}"
+                 custom_directives:
+                   - fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                   - fastcgi_pass unix:/var/run/fpm-dvwa.sock;
+                   - fastcgi_index index.php;
+                   - include fastcgi_params;
+                   - fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+- name: install PHP from Jeff Geerling
+  import_role:
+    name: geerlingguy.php
