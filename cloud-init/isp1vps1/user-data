@@ -70,6 +70,7 @@ packages:
     - ansible-core
     - ansible-collection-ansible-posix
     - ansible-collection-community-general
+    - ansible-collection-community-mysql
 
 runcmd:
   - sysctl -p /etc/sysctl.d/98-swappiness.conf
