@@ -71,6 +71,7 @@ packages:
     - ansible-collection-ansible-posix
     - ansible-collection-community-general
     - ansible-collection-community-mysql
+    - python3-PyMySQL
 
 runcmd:
   - sysctl -p /etc/sysctl.d/98-swappiness.conf
