@@ -55,6 +55,8 @@
 
 - name: SELinux - Apply file context
   ansible.builtin.command: restorecon -irv "{{ www_base }}"
+  register: modified_context
+  changed_when: modified_context.stdout != ""
 
 - name: SELinux - Allow Nginx/PHP to connect to a database
   ansible.posix.seboolean:
