@@ -128,9 +128,4 @@
     path: /etc/php.ini
     line: 'allow_url_include = On'
     regexp: 'allow_url_include.*'
-
-- name: Restart service php-fpm, in all cases
-  ansible.builtin.service:
-    name: php-fpm
-    state: restarted
-
+  notify: restart php-fpm
