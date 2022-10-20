@@ -1,0 +1,7 @@
+---
+- name: Installs and configure a LEMP server
+  hosts: isp3vps2.example.com
+
+  roles:
+  - { role: lemp }
+

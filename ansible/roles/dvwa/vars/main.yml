@@ -1,67 +1,23 @@
-www_base: /srv/www/isp3vps2.example.com
-docroot: "{{ www_base }}/public"
+
 local_content_repo: "{{ www_base }}/repo"
-www_log_dir: "{{ www_base }}/log"
-www_tmp_dir: "{{ www_base }}/tmp"
 remote_content_repo: https://github.com/digininja/DVWA.git
-php_webserver_daemon: "nginx"
-php_enable_php_fpm: true
-php_fpm_state: started
-php_fpm_enabled_on_boot: true
-php_fpm_pool_user: "nginx"
-php_fpm_pool_group: "nginx"
-php_date_timezone: "UTC"
-php_memory_limit: "128M"
-php_max_execution_time: "90"
-php_upload_max_filesize: "256M"
-php_packages:
-  - php
-  - php-fpm
-  - php-cli
-  - php-common
-  - php-devel
-  - php-gd
-  - php-mbstring
-  - php-pdo
-  - php-pecl-apcu
-  - php-xml
-php_fpm_pools:
-  - pool_name: dvwa
-    pool_template: www.conf.j2
-    pool_listen: "/var/run/php-fpm/fpm-$pool.sock"
-    pool_listen_mode: "0660"
-    pool_pm: dynamic
-    pool_pm_max_children: 5
-    pool_pm_start_servers: 2
-    pool_pm_min_spare_servers: 1
-    pool_pm_max_spare_servers: 3
-    pool_pm_max_requests: 500
-php_mysql_package: php-mysql
-mysql_enabled_on_startup: true
-mysql_packages:
-  - mariadb
-  - mariadb-server
-mysql_daemon: mariadb
-mysql_user: mysql
-mysql_config_file: /etc/my.cnf
-mysql_config_include_dir: /etc/my.cnf.d
-mysql_supports_innodb_large_prefix: true
-mysql_slow_query_log_enabled: false
-mysql_slow_query_log_file: /var/log/mariadb/mariadb-slow.log
-#mysql_log: /var/log/mariadb/mariadb.log
-mysql_log: ""
-mysql_log_error: /var/log/mariadb/mariadb-error.log
-mysql_log_file_group: mysql
-mysql_socket: /var/lib/mysql/mysql.sock
-mysql_pid_file: /var/run/mariadb/mariadb.pid
-mysql_syslog_tag: mariadb
-mysql_root_password: password
-mysql_databases:
-  - name: dvwa
-    #encoding: latin1
-    #collation: latin1_general_ci
-mysql_users:
-  - name: dvwa
-    host: "localhost"
-    password: p@ssw0rd
-    priv: "dvwa.*:ALL"
+    #php_fpm_pools:
+    #  - pool_name: dvwa
+    #    pool_template: www.conf.j2
+    #    pool_listen: "/var/run/php-fpm/fpm-$pool.sock"
+    #    pool_listen_mode: "0660"
+    #    pool_pm: dynamic
+    #    pool_pm_max_children: 5
+    #    pool_pm_start_servers: 2
+    #    pool_pm_min_spare_servers: 1
+    #    pool_pm_max_spare_servers: 3
+    #    pool_pm_max_requests: 500
+#mysql_databases:
+#  - name: dvwa
+#    #encoding: latin1
+#    #collation: latin1_general_ci
+#mysql_users:
+#  - name: dvwa
+#    host: "localhost"
+#    password: p@ssw0rd
+#    priv: "dvwa.*:ALL"

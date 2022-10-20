@@ -1,5 +1,5 @@
 ---
-- name: Installs and configure a LEMP server with DVWA
+- name: Installs and configure DVWA on a LEMP server
   hosts: isp3vps2.example.com
 
   roles:
