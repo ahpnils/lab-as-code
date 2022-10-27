@@ -43,3 +43,39 @@ mysql_socket: /var/lib/mysql/mysql.sock
 mysql_pid_file: /var/run/mariadb/mariadb.pid
 mysql_syslog_tag: mariadb
 mysql_root_password: password
+
+webdirs:
+  - "public"
+  - "tmp"
+  - "log"
+  - "session"
+
+sites:
+  - name: isp3vps2
+    fqdn: isp3vps2.example.com
+    uid: 6601
+    php: false
+    mysql: false
+    mypasswd: nopassword
+    host: isp3vps2.example.com
+  - name: isp3site2
+    fqdn: isp3site2.example.com
+    uid: 6602
+    php: true
+    mysql: isp3site2
+    mypasswd: password
+    host: isp3vps2.example.com
+  - name: dvwa
+    fqdn: dvwa.example.com
+    uid: 6603
+    php: true
+    mysql: dvwa
+    mypasswd: p@ssw0rd
+    host: isp3vps2.example.com
+  - name: foo
+    fqdn: foo.example.com
+    uid: 6604
+    php: true
+    mysql: foo
+    mypasswd: foopass
+    host: isp3vps3.example.com

@@ -16,6 +16,44 @@
     - "{{ www_log_dir }}"
     - "{{ www_tmp_dir }}"
 
+- name: Create groups for web users
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.uid }}"
+    state: present
+  with_items: "{{ sites }}"
+  tags:
+    - users
+  #no_log: "{{ ansible_verbosity < 3 }}"
+
+- name: Create web users and home directories
+  user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    group: "{{ item.name }}"
+    shell: "/sbin/nologin"
+    home: "/srv/www/{{ item.fqdn }}"
+    comment: "system user for website {{ item.fqdn }}"
+    state: present
+  with_items: "{{ sites }}"
+  tags:
+    - users
+  #no_log: "{{ ansible_verbosity < 3 }}"
+
+- name: Create web directories
+  file:
+    path: "/srv/www/{{ item.0.fqdn }}/{{ item.1 }}"
+    state: directory
+    mode: 0750
+    owner: "{{ item.0.name }}"
+    group: "{{ item.0.name }}"
+  with_nested:
+    - "{{ sites }}"
+    - "{{ webdirs }}"
+  tags:
+    - users
+  #no_log: "{{ ansible_verbosity < 3 }}"
+
 - name: Allow Nginx to read files in www_base
   community.general.sefcontext:
     target: "{{ item }}"
@@ -91,7 +129,47 @@
                    #                   - include fastcgi_params;
                    #                   - fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
   notify: restart nginx
+  tags:
+    - nginx
 
+- name: Create Websites Nginx configurations
+  include_role:
+    name: nginxinc.nginx_core.nginx_config
+  with_items: "{{ sites }}"
+  vars:
+    nginx_config_http_template_enable: true
+    nginx_config_http_template:
+      - template_file: http/default.conf.j2
+        deployment_location: "/etc/nginx/conf.d/{{ item.fqdn }}.conf"
+        backup: false
+        config:
+         servers:
+           - core:
+               listen:
+                 - port: 80
+               server_name: "{{ item.fqdn }} www.{{ item.fqdn }}"
+             log:
+               access:
+                 - path: "/srv/www/{{ item.fqdn }}/log/access.log"
+               error:
+                 - file: "/srv/www/{{ item.fqdn }}/log/error.log"
+             locations:
+               - location: /
+                 core:
+                   index: index.html index.php
+                   root: "/srv/www/{{ item.fqdn }}/public/"
+                   #               - location: ~ \.php$
+                   #                 core:
+                   #                   root: "{{ docroot }}"
+                   #                 custom_directives:
+                   #                   - fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                   #                   - fastcgi_pass unix:/var/run/php-fpm/fpm-dvwa.sock;
+                   #                   - fastcgi_index index.php;
+                   #                   - include fastcgi_params;
+                   #                   - fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                   #notify: restart nginx
+  tags:
+    - nginx
 
 - name: install PHP from Jeff Geerling
   import_role:
