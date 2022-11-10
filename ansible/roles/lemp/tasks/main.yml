@@ -128,17 +128,8 @@
              locations:
                - location: /
                  core:
-                   index: index.html index.php
+                   index: index.html
                    root: "{{ docroot }}"
-                   #               - location: ~ \.php$
-                   #                 core:
-                   #                   root: "{{ docroot }}"
-                   #                 custom_directives:
-                   #                   - fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                   #                   - fastcgi_pass unix:/var/run/php-fpm/fpm-dvwa.sock;
-                   #                   - fastcgi_index index.php;
-                   #                   - include fastcgi_params;
-                   #                   - fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
   notify: restart nginx
   tags:
     - nginx
@@ -146,29 +137,31 @@
 - name: Create Websites Nginx configurations
   include_role:
     name: nginxinc.nginx_core.nginx_config
-  with_items: "{{ sites }}"
+  loop_control:
+    loop_var: site
+  loop: "{{ sites }}"
   vars:
     nginx_config_http_template_enable: true
     nginx_config_http_template:
       - template_file: http/default.conf.j2
-        deployment_location: "/etc/nginx/conf.d/{{ item.fqdn }}.conf"
+        deployment_location: "/etc/nginx/conf.d/{{ site.fqdn }}.conf"
         backup: false
         config:
          servers:
            - core:
                listen:
                  - port: 80
-               server_name: "{{ item.fqdn }} www.{{ item.fqdn }}"
+               server_name: "{{ site.fqdn }} www.{{ site.fqdn }}"
              log:
                access:
-                 - path: "/srv/www/{{ item.fqdn }}/log/access.log"
+                 - path: "/srv/www/{{ site.fqdn }}/log/access.log"
                error:
-                 - file: "/srv/www/{{ item.fqdn }}/log/error.log"
+                 - file: "/srv/www/{{ site.fqdn }}/log/error.log"
              locations:
                - location: /
                  core:
                    index: index.html index.php
-                   root: "/srv/www/{{ item.fqdn }}/public/"
+                   root: "/srv/www/{{ site.fqdn }}/public/"
                    #               - location: ~ \.php$
                    #                 core:
                    #                   root: "{{ docroot }}"
@@ -178,7 +171,7 @@
                    #                   - fastcgi_index index.php;
                    #                   - include fastcgi_params;
                    #                   - fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                   #notify: restart nginx
+                   notify: restart nginx
   tags:
     - nginx
 
