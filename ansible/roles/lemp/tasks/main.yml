@@ -40,6 +40,17 @@
     - users
   #no_log: "{{ ansible_verbosity < 3 }}"
 
+- name: Adjust home directories modes so Nginx can go through
+  file:
+    path: "/srv/www/{{ item.fqdn }}/"
+    state: directory
+    mode: 0750
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  loop: "{{ sites }}"
+  tags:
+    - users
+
 - name: Create web directories
   file:
     path: "/srv/www/{{ item.0.fqdn }}/{{ item.1 }}"
@@ -133,6 +144,16 @@
   notify: restart nginx
   tags:
     - nginx
+
+- name: Add Nginx user to websites groups
+  ansible.builtin.user:
+    name: nginx
+    groups: "{{ item.name }}"
+    append: yes
+  loop: "{{ sites }}"
+  tags:
+    - nginx
+    - users
 
 - name: Create Websites Nginx configurations
   include_role:
