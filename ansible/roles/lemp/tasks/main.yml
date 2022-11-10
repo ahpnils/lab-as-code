@@ -196,8 +196,42 @@
   tags:
     - nginx
 
+
+- name: configure FPM pools
+  include_role:
+    name: geerlingguy.php
+  loop_control:
+    loop_var: site
+  loop: "{{ sites }}"
+  when:
+    - site.php == true
+  vars:
+    php_fpm_pools:
+      - pool_name: "{{ site.name }}"
+        pool_template: www.conf.j2
+        pool_listen: "/var/run/php-fpm/fpm-{{ site.name }}.sock"
+        php_fpm_pool_user: "{{ site.name }}"
+        php_fpm_pool_group: "{{ site.name }}"
+        pool_pm: ondemand
+        pool_pm_max_children: 5
+    notify: restart php-fpm
+  tags:
+    - php_fpm
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: "{{ site.name }}"
+    verbosity: 2
+  loop_control:
+    loop_var: site
+  loop: "{{ sites }}"
+  tags:
+    - php_fpm
+
 - name: install PHP from Jeff Geerling
   import_role:
-    name: geerlingguy.php
     name: geerlingguy.php-mysql
     name: geerlingguy.mysql
+  tags:
+    - php_mysql
+
