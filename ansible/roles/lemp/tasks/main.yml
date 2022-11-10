@@ -54,7 +54,7 @@
     - users
   #no_log: "{{ ansible_verbosity < 3 }}"
 
-- name: Allow Nginx to read files in www_base
+- name: SELinux - Allow Nginx to read files in www_base
   community.general.sefcontext:
     target: "{{ item }}"
     setype: httpd_sys_content_t
@@ -63,27 +63,38 @@
     - '{{ www_base }}'
     - '{{ docroot }}'
     - '{{ www_tmp_dir }}'
+  tags:
+    - selinux 
 
-- name: Allow Nginx to write log files in www_log_dir
+- name: SELinux - Allow Nginx to write log files in www_log_dir
   community.general.sefcontext:
-    target: "{{ item }}"
+    target: "/srv/www/{{ item.0.fqdn }}/log/{{ item.1 }}"
     setype: httpd_log_t
     state: present
-  loop:
-    - "{{ www_log_dir }}"
-    - "{{ www_log_dir }}/access.log"
-    - "{{ www_log_dir }}/error.log"
+  with_nested:
+    - "{{ sites }}"
+    - [
+      "access.log",
+      "error.log",
+      ]
+  tags:
+    - selinux 
 
 - name: SELinux - Apply file context
-  ansible.builtin.command: restorecon -irv "{{ www_base }}"
+  ansible.builtin.command: restorecon -irv "/srv/www/{{ item.fqdn }}"
   register: modified_context
   changed_when: modified_context.stdout != ""
+  with_items: "{{ sites }}"
+  tags:
+    - selinux 
 
 - name: SELinux - Allow Nginx/PHP to connect to a database
   ansible.posix.seboolean:
     name: httpd_can_network_connect_db
     state: yes
     persistent: yes
+  tags:
+    - selinux 
 
 - name: install Nginx from OS repos
   import_role:
