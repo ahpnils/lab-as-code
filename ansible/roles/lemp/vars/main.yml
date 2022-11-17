@@ -6,8 +6,8 @@ php_webserver_daemon: "nginx"
 php_enable_php_fpm: true
 php_fpm_state: started
 php_fpm_enabled_on_boot: true
-#php_fpm_pool_user: "nginx"
-#php_fpm_pool_group: "nginx"
+php_fpm_pool_user: "$pool"
+php_fpm_pool_group: "$pool"
 php_date_timezone: "UTC"
 php_memory_limit: "128M"
 php_max_execution_time: "90"

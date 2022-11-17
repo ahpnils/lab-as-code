@@ -115,6 +115,7 @@
     nginx_install_from: os_repository
     nginx_enable: true
     nginx_start: true
+
 - name: Create Custom Nginx configurations
   import_role:
     name: nginxinc.nginx_core.nginx_config
@@ -183,19 +184,22 @@
                  core:
                    index: index.html index.php
                    root: "/srv/www/{{ site.fqdn }}/public/"
-                   #               - location: ~ \.php$
-                   #                 core:
-                   #                   root: "{{ docroot }}"
-                   #                 custom_directives:
-                   #                   - fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                   #                   - fastcgi_pass unix:/var/run/php-fpm/fpm-dvwa.sock;
-                   #                   - fastcgi_index index.php;
-                   #                   - include fastcgi_params;
-                   #                   - fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                   notify: restart nginx
+               - location: ~ \.php$
+                 core:
+                   root: "/srv/www/{{ site.fqdn }}/public/"
+                 # These custom directives are for PHP-enabled websites.
+                 # They are included even if PHP is disabled, but this should not
+                 # be a big issue since there will be no PHP-FPM pool to answer.
+                 custom_directives:
+                   #- "fastcgi_split_path_info ^(.+\.php)(/.+)$;"
+                   - "fastcgi_pass unix:/var/run/php-fpm/fpm-{{ site.name }}.sock;"
+                   - "fastcgi_index index.php;"
+                   - "include fastcgi_params;"
+                   - "fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;"
+
+    notify: restart nginx
   tags:
     - nginx
-
 
 - name: configure FPM pools
   include_role:
@@ -210,8 +214,8 @@
       - pool_name: "{{ site.name }}"
         pool_template: www.conf.j2
         pool_listen: "/var/run/php-fpm/fpm-{{ site.name }}.sock"
-        php_fpm_pool_user: "{{ site.name }}"
-        php_fpm_pool_group: "{{ site.name }}"
+        #php_fpm_pool_user: "{{ site.name }}"
+        #php_fpm_pool_group: "{{ site.name }}"
         pool_pm: ondemand
         pool_pm_max_children: 5
     notify: restart php-fpm
