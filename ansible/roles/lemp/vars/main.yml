@@ -23,7 +23,7 @@ php_packages:
   - php-pdo
   - php-pecl-apcu
   - php-xml
-php_mysql_package: php-mysql
+php_mysql_package: php-mysqlnd
 mysql_enabled_on_startup: true
 mysql_packages:
   - mariadb
@@ -62,20 +62,20 @@ sites:
     fqdn: isp3site2.example.com
     uid: 6602
     php: true
-    mysql: isp3site2
+    mysql: true
     mypasswd: password
     host: isp3vps2.example.com
   - name: dvwa
     fqdn: dvwa.example.com
     uid: 6603
     php: true
-    mysql: dvwa
+    mysql: true
     mypasswd: p@ssw0rd
     host: isp3vps2.example.com
   - name: foo
     fqdn: foo.example.com
     uid: 6604
     php: true
-    mysql: foo
+    mysql: true
     mypasswd: foopass
     host: isp3vps3.example.com

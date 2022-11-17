@@ -232,10 +232,26 @@
   tags:
     - php_fpm
 
-- name: install PHP from Jeff Geerling
+- name: install PHP-MySQL from Jeff Geerling
   import_role:
     name: geerlingguy.php-mysql
-    name: geerlingguy.mysql
   tags:
     - php_mysql
 
+- name: install MySQL from Jeff Geerling
+  include_role:
+    name: geerlingguy.mysql
+  loop_control:
+    loop_var: site
+  loop: "{{ sites }}"
+  when:
+    - site.mysql == true
+  vars:
+    mysql_databases:
+      - name: "{{ site.name }}"
+    mysql_users:
+      - name: "{{ site.name }}"
+        password: "{{ site.mypasswd }}"
+        priv: "*.*:USAGE"
+  tags:
+    - mysql
