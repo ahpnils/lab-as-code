@@ -12,6 +12,9 @@ php_date_timezone: "UTC"
 php_memory_limit: "128M"
 php_max_execution_time: "90"
 php_upload_max_filesize: "256M"
+# I don't use geerlinguy.php-mysql but add
+# php-mysqlnd because it does not add
+# a default www.conf FPM pool I don't need.
 php_packages:
   - php
   - php-fpm
@@ -23,7 +26,7 @@ php_packages:
   - php-pdo
   - php-pecl-apcu
   - php-xml
-php_mysql_package: php-mysqlnd
+  - php-mysqlnd
 mysql_enabled_on_startup: true
 mysql_packages:
   - mariadb

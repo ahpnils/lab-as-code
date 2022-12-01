@@ -214,8 +214,8 @@
       - pool_name: "{{ site.name }}"
         pool_template: www.conf.j2
         pool_listen: "/var/run/php-fpm/fpm-{{ site.name }}.sock"
-        #php_fpm_pool_user: "{{ site.name }}"
-        #php_fpm_pool_group: "{{ site.name }}"
+        # php_fpm_pool_user and php_fpm_pool_group are set to
+        # $pool in vars/main.yml
         pool_pm: ondemand
         pool_pm_max_children: 5
     notify: restart php-fpm
@@ -231,12 +231,6 @@
   loop: "{{ sites }}"
   tags:
     - php_fpm
-
-- name: install PHP-MySQL from Jeff Geerling
-  import_role:
-    name: geerlingguy.php-mysql
-  tags:
-    - php_mysql
 
 - name: install MySQL from Jeff Geerling
   include_role:
