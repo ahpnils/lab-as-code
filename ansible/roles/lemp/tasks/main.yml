@@ -248,6 +248,6 @@
     mysql_users:
       - name: "{{ site.name }}"
         password: "{{ site.mypasswd }}"
-        priv: "*.*:USAGE"
+        priv: "{{ site.name }}.*:ALL PRIVILEGES"
   tags:
     - mysql
