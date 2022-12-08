@@ -1,5 +1,7 @@
 - name: install Python deps
-  package: name="python3-PyMySQL"
+  package: 
+    name: "python3-PyMySQL"
+    state: present
 
 - name: Create base web directories
   ansible.builtin.file:
