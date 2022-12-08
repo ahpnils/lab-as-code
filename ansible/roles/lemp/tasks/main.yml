@@ -70,7 +70,7 @@
 - name: SELinux - Allow Nginx to read files in www_base
   community.general.sefcontext:
     target: "{{ item }}"
-    setype: httpd_sys_content_t
+    setype: httpd_sys_rw_content_t
     state: present
   loop:
     - '{{ www_base }}'
